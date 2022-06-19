@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BuildingStateController;
 use App\Http\Controllers\EstateAgentController;
 use App\Http\Controllers\HouseController;
+use App\Http\Controllers\locationsBelgiumController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SpecificationController;
@@ -50,10 +51,25 @@ Route::post('addHouse', [HouseController::class, 'addHouse']);
 Route::get('houses', [HouseController::class, 'list']);
 Route::get('houses/{id}', [HouseController::class, 'show']);
 Route::get('housesByLocality', [HouseController::class, 'getHouseByLocality']);
+Route::get('housesLocality', [HouseController::class, 'getLocalities']);
+Route::get('housesSubtype', [HouseController::class, 'getSubtypes']);
+Route::get('housesState', [HouseController::class, 'getStates']);
 Route::get('housesByPrice', [HouseController::class, 'getHouseByPricing']);
 Route::get('housesByAgent', [HouseController::class, 'getHouseByEstateAgent']);
 Route::get('housesByProperty', [HouseController::class, 'getHouseByProperty']);
 Route::get('housesByState', [HouseController::class, 'getHouseByState']);
+Route::get('housesBySearch', [HouseController::class, 'getHouseBySearch']);
+Route::get('housesByRecommendation', [HouseController::class, 'getHouseByRecommendation']);
+
+
+//get locations belgium
+Route::get('locationsBelgium', [locationsBelgiumController::class, 'getLocationsBelgium']);
+
+Route::get('allUsers', [LoginController::class, 'getUsers']);
+Route::get('login', [LoginController::class, 'validateUser']);
+
+Route::get('emails', [RegisterController::class, 'getEmails']);
+Route::post('register',[RegisterController::class, 'create']);
 
 
 //update agent

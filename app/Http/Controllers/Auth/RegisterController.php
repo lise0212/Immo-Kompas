@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -43,6 +44,13 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    public function getEmails(){
+        return DB::table('users')
+            ->select('email')
+            ->orderBy('email')
+            ->get();
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -64,12 +72,29 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    protected function create(array $data)
+    // protected function create(array $data)
+    // {
+    //     return User::create([
+    //         'name' => $data['name'],
+    //         'email' => $data['email'],
+    //         'password' => Hash::make($data['password']),
+    //     ]);
+    // }
+
+    public function create(Request $request)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        //$password = Hash::make($request['password']);
+        $user = new User();
+        $user->name=$request->name;
+        $user->email=$request->email;
+        $user->password=Hash::make($request['password']);
+        $result = $user->save();
+        if($result)
+        {
+            return ["Succes"];
+        }
+        else{
+            return ["Fail"];
+        }
     }
 }

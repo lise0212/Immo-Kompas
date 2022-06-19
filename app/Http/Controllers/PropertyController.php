@@ -45,8 +45,8 @@ class PropertyController extends Controller
 
     public function list()
     {
-        Property::all();
-        return Property::paginate(16);
+        return Property::all();
+        //return Property::paginate(16);
     }
 
     public function show($id)

@@ -12,6 +12,7 @@ class Specification extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
+        'house_id',
         'kitchen_equipment',
         'furnished',
         'open_fire',

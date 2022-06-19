@@ -11,6 +11,8 @@ use App\Models\User;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 
@@ -48,4 +50,34 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    public function validateUser(Request $request){
+        if($request->has('email', 'password')){
+            //$password = Hash::make($request[$request->password]);
+            $paswoord= DB::table('users')
+            ->select('password')
+            ->where("email", "=", "$request->email")
+            ->get();
+
+            $user = DB::table('users')
+            ->where("email", "=", "$request->email")
+            ->where("password", "=", Hash::check("$request->password", $paswoord))
+            ->get();
+
+            if(count($user) == 1){
+                return $user;
+            }
+            else{
+                return $user;
+            }
+        }
+    }
+
+    public function getUsers(){
+        return DB::table('users')
+            ->select('email')
+            ->get();
+    }
+
+
 }

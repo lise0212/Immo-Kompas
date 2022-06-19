@@ -44,6 +44,7 @@ class SpecificationController extends Controller
     public function addSpecification(Request $request)
     {
         $specification = new Specification();
+        $specification->house_id=$request->house_id;
         $specification->kitchen_equipment=$request->kitchen_equipment;
         $specification->furnished=$request->furnished;
         $specification->open_fire=$request->open_fire;

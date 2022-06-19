@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\EstateAgent;
 use App\Models\House;
+use App\Models\Specification;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -44,12 +45,12 @@ class HouseController extends Controller
         $house->locality=$request->locality;
         $house->subtype_of_property=$request->subtype_of_property;
         $house->price=$request->price;
-        $house->number_of_rooms=$request->numbe_of_rooms;
+        $house->number_of_rooms=$request->number_of_rooms;
         $house->area=$request->area;
         $result = $house->save();
         if($result)
         {
-            return ["Success"];
+            return $house->id;
         }
         else{
             return ["Fail"];
@@ -60,8 +61,8 @@ class HouseController extends Controller
     //get
     public function list()
     {
-        House::all();
-        return House::paginate(16);
+        return House::all();
+        //return House::paginate(16);
     }
 
     public function show($id)
@@ -79,6 +80,34 @@ class HouseController extends Controller
 
         // return House::where("locality", "=", "$locality")
         // ->get()->paginate(16);
+    }
+
+    public function getLocalities(){
+        return DB::table('houses')
+            ->select('locality')
+            ->distinct()
+            ->whereNot('locality', "=", '0')
+            ->orderBy('locality')
+            ->get();
+    }
+
+    public function getSubtypes(){
+        return DB::table('houses')
+            ->select('subtype_of_property')
+            ->distinct()
+            ->whereNot('subtype_of_property', "=", '0')
+            ->orderBy('subtype_of_property')
+            ->get();
+    }
+
+    public function getStates(){
+        return DB::table('houses')
+            ->join('building_states', 'houses.state_id', "=", 'building_states.id')
+            ->select('building_state')
+            ->distinct()
+            ->whereNot('building_state', "=", '0')
+            ->orderBy('building_state')
+            ->get();
     }
 
     public function getHouseByPricing(Request $minPrice, Request $maxPrice)
@@ -121,6 +150,45 @@ class HouseController extends Controller
         }
     }
 
+    // public function getHouseBySearch(Request $property, Request $locality, Request $minPrice, Request $maxPrice)
+    // {
+    //     $minPrice->input('minPrice');
+    //     $maxPrice->input('maxPrice');
+
+    //     if($property->has('property_type') ){
+    //         return DB::table('houses')
+    //         ->join('properties', 'houses.property_id', "=", 'properties.id')
+    //         ->where('properties.property_type', "=", "%$property->property_type%", "AND", 'houses.locality', "=", "$locality->locality")
+    //         ->whereBetween('price', [$minPrice, $maxPrice])
+    //         ->get();
+    //     }
+    // }
+
+    public function getHouseBySearch(Request $request)
+    {
+        if($request->has('property_type', 'locality', 'min_price', 'max_price') ){
+            return DB::table('houses')
+            ->join('properties', 'houses.property_id', "=", 'properties.id')
+            ->join('estate_agents', 'houses.estate_agent_id', "=", 'estate_agents.id')
+            ->where('properties.property_type', "=", "$request->property_type")
+            ->where('houses.locality', "=", "$request->locality")
+            ->whereBetween('houses.price', [$request->min_price, $request->max_price])
+            ->get();
+        }
+    }
+
+    public function getHouseByRecommendation(Request $request)
+    {
+        if($request->has('property_type', 'locality', 'min_price', 'max_price') ){
+            return DB::table('houses')
+            ->join('properties', 'houses.property_id', "=", 'properties.id')
+            ->join('estate_agents', 'houses.estate_agent_id', "=", 'estate_agents.id')
+            ->where('properties.property_type', "=", "$request->property_type")
+            ->where('houses.locality', "=", "$request->locality")
+            ->whereBetween('houses.price', [$request->max_price, $request->max_price*1.1])
+            ->get();
+        }
+    }
     
     // public function update(Request $request, House $house)
     // {
