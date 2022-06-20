@@ -50,7 +50,7 @@ class HouseController extends Controller
         $result = $house->save();
         if($result)
         {
-            return $house->id;
+            return ["Succes"];
         }
         else{
             return ["Fail"];
@@ -168,6 +168,7 @@ class HouseController extends Controller
     {
         if($request->has('property_type', 'locality', 'min_price', 'max_price') ){
             return DB::table('houses')
+            ->select('houses.id', 'houses.estate_agent_id', 'houses.property_id','houses.sale_id', 'houses.state_id', 'houses.locality', 'houses.price', 'houses.number_of_rooms', 'houses.area','houses.image_url', 'estate_agents.name', 'estate_agents.name', 'properties.property_type')
             ->join('properties', 'houses.property_id', "=", 'properties.id')
             ->join('estate_agents', 'houses.estate_agent_id', "=", 'estate_agents.id')
             ->where('properties.property_type', "=", "$request->property_type")
@@ -181,6 +182,7 @@ class HouseController extends Controller
     {
         if($request->has('property_type', 'locality', 'min_price', 'max_price') ){
             return DB::table('houses')
+            ->select('houses.id', 'houses.estate_agent_id', 'houses.property_id','houses.sale_id', 'houses.state_id', 'houses.locality', 'houses.price', 'houses.number_of_rooms', 'houses.area','houses.image_url', 'estate_agents.name', 'estate_agents.name', 'properties.property_type')
             ->join('properties', 'houses.property_id', "=", 'properties.id')
             ->join('estate_agents', 'houses.estate_agent_id', "=", 'estate_agents.id')
             ->where('properties.property_type', "=", "$request->property_type")

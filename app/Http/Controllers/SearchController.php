@@ -70,6 +70,7 @@ class SearchController extends Controller
     public function addSearch(Request $request)
     {
         $search = new Search;
+        $search->user_id=$request->user_id;
         $search->email=$request->email;
         $search->property_type=$request->property_type;
         $search->locality=$request->locality;

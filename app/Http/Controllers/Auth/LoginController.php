@@ -52,30 +52,26 @@ class LoginController extends Controller
     }
 
     public function validateUser(Request $request){
-        if($request->has('email', 'password')){
-            //$password = Hash::make($request[$request->password]);
-            $paswoord= DB::table('users')
-            ->select('password')
+        $user= DB::table('users')
             ->where("email", "=", "$request->email")
-            ->get();
-
-            $user = DB::table('users')
-            ->where("email", "=", "$request->email")
-            ->where("password", "=", Hash::check("$request->password", $paswoord))
-            ->get();
-
-            if(count($user) == 1){
-                return $user;
-            }
-            else{
-                return $user;
-            }
+            ->first();
+        
+        if (Hash::check($request->password, $user->password)) {
+            return $user;
+        } else {
+            return ['Fail'];
         }
     }
 
     public function getUsers(){
         return DB::table('users')
             ->select('email')
+            ->get();
+    }
+
+    public function getUser(Request $request){
+        return DB::table('users')
+            ->where('email', "=", "$request->email")
             ->get();
     }
 

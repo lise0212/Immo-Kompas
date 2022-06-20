@@ -5,17 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Search extends Model
+class Favorite extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'id';
+
     protected $fillable = [
         'user_id',
-        'email',
-        'property_type',
-        'locality',
-        'min_price',
-        'max_price',
+        'house_id'
     ];
 
     public $timestamps = false;

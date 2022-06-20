@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BuildingStateController;
 use App\Http\Controllers\EstateAgentController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\HouseController;
 use App\Http\Controllers\locationsBelgiumController;
 use App\Http\Controllers\PropertyController;
@@ -40,6 +41,8 @@ Route::post('addSearch', [SearchController::class, 'addSearch']);
 Route::get('searches', [SearchController::class, 'list']);
 Route::get('searches/{id}', [SearchController::class, 'show']);
 
+Route::post('addFavorite', [FavoriteController::class, 'addFavorite']);
+
 
 //update house
 Route::put('updateHouse/{id}', [HouseController::class, 'update']);
@@ -67,6 +70,7 @@ Route::get('locationsBelgium', [locationsBelgiumController::class, 'getLocations
 
 Route::get('allUsers', [LoginController::class, 'getUsers']);
 Route::get('login', [LoginController::class, 'validateUser']);
+Route::get('getUser', [LoginController::class, 'getUser']);
 
 Route::get('emails', [RegisterController::class, 'getEmails']);
 Route::post('register',[RegisterController::class, 'create']);
