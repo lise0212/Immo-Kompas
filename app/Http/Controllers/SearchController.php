@@ -71,7 +71,6 @@ class SearchController extends Controller
     {
         $search = new Search;
         $search->user_id=$request->user_id;
-        $search->email=$request->email;
         $search->property_type=$request->property_type;
         $search->locality=$request->locality;
         $search->min_price=$request->min_price;

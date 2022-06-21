@@ -53,11 +53,10 @@ class EstateAgentController extends Controller
         //     return EstateAgent::where('name', $request->name)->get();
         // }
         
-        $name = $request->input('name');
+        
 
         $agents = DB::table('estate_agents')
-        ->select('*')
-        ->where("name", "LIKE", "%$name%")
+        ->where("name", "=", "$request->name")
         ->get();
 
         return $agents;

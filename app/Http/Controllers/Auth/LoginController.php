@@ -70,9 +70,10 @@ class LoginController extends Controller
     }
 
     public function getUser(Request $request){
-        return DB::table('users')
+        $user = DB::table('users')
             ->where('email', "=", "$request->email")
             ->get();
+        return $user;
     }
 
 

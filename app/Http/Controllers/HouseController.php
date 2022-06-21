@@ -50,7 +50,7 @@ class HouseController extends Controller
         $result = $house->save();
         if($result)
         {
-            return ["Succes"];
+            return $house->id;
         }
         else{
             return ["Fail"];

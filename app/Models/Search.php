@@ -11,7 +11,6 @@ class Search extends Model
 
     protected $fillable = [
         'user_id',
-        'email',
         'property_type',
         'locality',
         'min_price',
