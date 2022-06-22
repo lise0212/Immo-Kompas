@@ -63,6 +63,7 @@ Route::get('housesByProperty', [HouseController::class, 'getHouseByProperty']);
 Route::get('housesByState', [HouseController::class, 'getHouseByState']);
 Route::get('housesBySearch', [HouseController::class, 'getHouseBySearch']);
 Route::get('housesByRecommendation', [HouseController::class, 'getHouseByRecommendation']);
+Route::post('upload', [HouseController::class, 'uploadFile']);
 
 
 //get locations belgium

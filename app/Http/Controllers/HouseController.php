@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\EstateAgent;
 use App\Models\House;
 use App\Models\Specification;
+use Illuminate\Http\File as HttpFile;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\Testing\File;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File as FacadesFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Console\Input\Input;
 
@@ -150,25 +154,11 @@ class HouseController extends Controller
         }
     }
 
-    // public function getHouseBySearch(Request $property, Request $locality, Request $minPrice, Request $maxPrice)
-    // {
-    //     $minPrice->input('minPrice');
-    //     $maxPrice->input('maxPrice');
-
-    //     if($property->has('property_type') ){
-    //         return DB::table('houses')
-    //         ->join('properties', 'houses.property_id', "=", 'properties.id')
-    //         ->where('properties.property_type', "=", "%$property->property_type%", "AND", 'houses.locality', "=", "$locality->locality")
-    //         ->whereBetween('price', [$minPrice, $maxPrice])
-    //         ->get();
-    //     }
-    // }
-
     public function getHouseBySearch(Request $request)
     {
         if($request->has('property_type', 'locality', 'min_price', 'max_price') ){
             return DB::table('houses')
-            ->select('houses.id', 'houses.estate_agent_id', 'houses.property_id','houses.sale_id', 'houses.state_id', 'houses.locality', 'houses.price', 'houses.number_of_rooms', 'houses.area','houses.image_url', 'estate_agents.name', 'estate_agents.name', 'properties.property_type')
+            ->select('houses.id', 'houses.estate_agent_id', 'houses.property_id','houses.sale_id', 'houses.state_id', 'houses.locality', 'houses.price', 'houses.number_of_rooms', 'houses.area','houses.image_url', 'estate_agents.name', 'estate_agents.email', 'properties.property_type')
             ->join('properties', 'houses.property_id', "=", 'properties.id')
             ->join('estate_agents', 'houses.estate_agent_id', "=", 'estate_agents.id')
             ->where('properties.property_type', "=", "$request->property_type")
@@ -182,7 +172,7 @@ class HouseController extends Controller
     {
         if($request->has('property_type', 'locality', 'min_price', 'max_price') ){
             return DB::table('houses')
-            ->select('houses.id', 'houses.estate_agent_id', 'houses.property_id','houses.sale_id', 'houses.state_id', 'houses.locality', 'houses.price', 'houses.number_of_rooms', 'houses.area','houses.image_url', 'estate_agents.name', 'estate_agents.name', 'properties.property_type')
+            ->select('houses.id', 'houses.estate_agent_id', 'houses.property_id','houses.sale_id', 'houses.state_id', 'houses.locality', 'houses.price', 'houses.number_of_rooms', 'houses.area','houses.image_url', 'estate_agents.name', 'estate_agents.email', 'properties.property_type')
             ->join('properties', 'houses.property_id', "=", 'properties.id')
             ->join('estate_agents', 'houses.estate_agent_id', "=", 'estate_agents.id')
             ->where('properties.property_type', "=", "$request->property_type")
@@ -191,41 +181,16 @@ class HouseController extends Controller
             ->get();
         }
     }
-    
-    // public function update(Request $request, House $house)
-    // {
-    //     $house->update($request->all());
 
-    //     return response()->json($house, 200);
-    // }
+    public function uploadFile(Request $request){
+        if($request['img']){
+            $image = $request['img'];
+            $extension = $image->getClientOriginalExtension();
+            $name = time() .'_'. $image->getClientOriginalName();
+            Storage::disk('local')->put($name, File::get($image));
+        }
 
-    // public function delete(House $house)
-    // {
-    //     $house->delete();
-
-    //     return response()->json(null, 204);
-    // }
- 
-    
-
-    // public function store(Request $request)
-    // {
-    //     return House::create($request->all());
-    // }
-
-    // public function update(Request $request, $id)
-    // {
-    //     $House = House::findOrFail($id);
-    //     $House->update($request->all());
-
-    //     return $House;
-    // }
-
-    // public function delete(Request $request, $id)
-    // {
-    //     $House = House::findOrFail($id);
-    //     $House->delete();
-
-    //     return 204;
-    // }
+         
+        return "succes";
+    }
 }
